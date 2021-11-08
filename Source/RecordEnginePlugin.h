@@ -41,6 +41,9 @@ public:
 	Methods marked with parenthesis are not overloaded methods
 	*/
 
+	/** Custom Methods: */
+	std::chrono::system_clock::time_point getPreciseFileTime();
+
 	/** Called for registering parameters */
 	void setParameter(EngineParameter& parameter);
 
