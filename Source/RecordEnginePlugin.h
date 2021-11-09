@@ -3,12 +3,23 @@
 #define RECORDENGINEPLUGIN_H_DEFINED
 
 #include <ProcessorHeaders.h>
+// #include <RecordEngineHeaders.h>
+#include <RecordingLib.h> // plugin-GUI/Plugins/Headers/RecordingLib.h
+// #include <RecordEngine>
+#include <chrono>
+
+
+// struct EngineParameter;
+
+// class RecordNode;
+// class RecordEngineManager;
+// struct RecordProcessorInfo;
+
 
 class RecordEnginePlugin : public RecordEngine
 {
 public:
 	RecordEnginePlugin();
-	
 	~RecordEnginePlugin();
 
 	String getEngineID() const;
@@ -41,9 +52,6 @@ public:
 	Methods marked with parenthesis are not overloaded methods
 	*/
 
-	/** Custom Methods: */
-	std::chrono::system_clock::time_point getPreciseFileTime();
-
 	/** Called for registering parameters */
 	void setParameter(EngineParameter& parameter);
 
@@ -53,23 +61,25 @@ public:
 	/** Called when recording stops to close all files and do all the necessary cleanups */
 	void closeFiles();
 
-	/** Called by the record thread before it starts writing the channels to disk */
-	void startChannelBlock(bool lastBlock);
-
 	/** Write continuous data for a channel. The raw buffer pointer is passed for speed, care must be taken to only read the specified number of bytes. */
 	void writeData(int writeChannel, int realChannel, const float* buffer, int size);
 
 	/** Write continuous data for a channel with synchronized float timestamps */
 	void writeSynchronizedData(int writeChannel, int realChannel, const float* dataBuffer, const double* ftsBuffer, int size);
 
-	/** Called by the record thread after it has written a channel block */
-	void endChannelBlock(bool lastBlock);
-
 	/** Write a single event to disk.  */
 	void writeEvent(int eventChannel, const MidiMessage& event);
 
 	/** Handle the timestamp sync text messages*/
 	void writeTimestampSyncText(uint16 sourceID, uint16 sourceIdx, int64 timestamp, float sourceSampleRate, String text);
+
+
+	// Not Primary:
+	/** Called by the record thread before it starts writing the channels to disk */
+	void startChannelBlock(bool lastBlock);
+
+	/** Called by the record thread after it has written a channel block */
+	void endChannelBlock(bool lastBlock);
 
 	/** Called when acquisition starts once for each processor that might record continuous data */
 	void registerProcessor(const GenericProcessor* processor);
@@ -106,6 +116,12 @@ public:
 	/** Called when the recording directory changes during an acquisition */
 	void directoryChanged();
 
+	/** Called to get the manager upon creation. */
+	static RecordEngineManager* getEngineManager();
+
+private:
+	/** Custom Methods: */
+	std::chrono::system_clock::time_point getPreciseFileTime();
 };
 
 #endif

@@ -1,15 +1,24 @@
 #include "RecordEnginePlugin.h"
 #include "date/date.h" // For precise timestamp functionality
-#include <chrono>
 #include <iostream> // Testing only:
 
-RecordEnginePlugin::RecordEnginePlugin();
+// #include <RecordNode.h>
+// #include <RecordEngine.h>
+
+
+RecordEnginePlugin::RecordEnginePlugin() 
+{
+
+}
 	
-RecordEnginePlugin::~RecordEnginePlugin();
+RecordEnginePlugin::~RecordEnginePlugin() 
+{
+
+}
 
 String RecordEnginePlugin::getEngineID() const 
 {
-	return "RecordEngine Name";
+	return "PHOTIMESTAMPED";
 }
 
 void RecordEnginePlugin::setParameter(EngineParameter& parameter)
@@ -113,7 +122,7 @@ void RecordEnginePlugin::resetChannels()
 
 }
 
-void RecordEnginePlugin::updateTimestamps(const Array<int64>& timestamps, int channel = -1)
+void RecordEnginePlugin::updateTimestamps(const Array<int64>& timestamps, int channel)
 {
 
 }
@@ -140,3 +149,14 @@ void RecordEnginePlugin::directoryChanged()
 {
 
 }
+
+RecordEngineManager* RecordEnginePlugin::getEngineManager()
+{
+    RecordEngineManager* man = new RecordEngineManager("PHOTIMESTAMPED", "Pho Precise Timestampped",
+                                                       &(engineFactory<RecordEnginePlugin>));
+    EngineParameter* param;
+    param = new EngineParameter(EngineParameter::BOOL, 0, "Test Bool Parameter", true);
+    man->addParameter(param);
+    return man;
+}
+
