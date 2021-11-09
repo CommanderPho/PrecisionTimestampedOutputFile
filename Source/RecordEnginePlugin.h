@@ -119,6 +119,11 @@ public:
 	/** Called to get the manager upon creation. */
 	static RecordEngineManager* getEngineManager();
 
+	// GenericProcessor Parameter Methods:
+	void saveCustomParametersToXml(XmlElement *parentElement)
+	void loadCustomParametersFromXml ()
+
+
 protected:
 	/** Custom Methods: */
 	std::chrono::system_clock::time_point getPreciseFileTime();
