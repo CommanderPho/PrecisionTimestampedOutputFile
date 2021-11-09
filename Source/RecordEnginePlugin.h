@@ -125,6 +125,10 @@ protected:
 
 private:
 	/** Custom Properties: */
+	// Might want: from BinaryRecording.cpp
+//	int m_recordingNum;
+//	Array<int64> m_startTS;
+
 	// int64 startTimestamp;
 	ScopedPointer<FileOutputStream> m_outputTextFile;
 
