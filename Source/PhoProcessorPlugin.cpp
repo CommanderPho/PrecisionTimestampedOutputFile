@@ -1,4 +1,5 @@
 #include "PhoProcessorPlugin.h"
+#include "PhoDatetimeTimestampHelper.h"
 
 using namespace ProcessorPluginSpace;
 
@@ -39,6 +40,7 @@ void PhoProcessorPlugin::process(AudioSampleBuffer& buffer)
 // called by GenericProcessor::update()
 void PhoProcessorPlugin::updateSettings()
 {
+	PhoDatetimeTimestampHelperSpace::getPreciseFileTimeString();
 
 }
 
@@ -50,7 +52,21 @@ void PhoProcessorPlugin::saveCustomParametersToXml(XmlElement *parentElement)
    	// Create the timestamp child element:
    	XmlElement* recordingStartTimestampNode = new XmlElement("RecordingStartTimestamp");
 	recordingStartTimestampNode->setAttribute("test", "test_id");
+	// if (recordingStartTime != nullptr) {
+	if (hasRecorded) {
+		String formattedRecordingStartTimeString = PhoDatetimeTimestampHelperSpace::formatPreciseFileTimeAsString(recordingStartTime);
+		recordingStartTimestampNode->setAttribute("startTime", formattedRecordingStartTimeString);
+	}
+	else {
+		recordingStartTimestampNode->setAttribute("startTime", "");
+	}
 
+	// if (isRecording) {
+
+	// }
+	// else {
+	// 	// If it has never recorded before, don't include the output
+	// }
 	mainNode->addChildElement(recordingStartTimestampNode);
 }
 
@@ -85,6 +101,8 @@ void PhoProcessorPlugin::loadCustomParametersFromXml()
 void PhoProcessorPlugin::startRecording()
 {
 	isRecording = true;
+	recordingStartTime = PhoDatetimeTimestampHelperSpace::getPreciseFileTime();
+	hasRecorded = true;
 }
 
 // called by GenericProcessor::setRecording()

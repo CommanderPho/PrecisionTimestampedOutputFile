@@ -13,6 +13,8 @@ namespace PhoDatetimeTimestampHelperSpace
 	/** Custom Methods: */
 	std::chrono::system_clock::time_point getPreciseFileTime();
 
+	String formatPreciseFileTimeAsString(std::chrono::system_clock::time_point aTimepoint);
+
 	String getPreciseFileTimeString();
 
 } // end namespace

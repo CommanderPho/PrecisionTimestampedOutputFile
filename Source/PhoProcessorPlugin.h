@@ -2,7 +2,9 @@
 #ifndef PROCESSORPLUGIN_H_DEFINED
 #define PROCESSORPLUGIN_H_DEFINED
 
+#include <chrono>
 #include <ProcessorHeaders.h>
+
 
 //namespace must be an unique name for your plugin
 namespace ProcessorPluginSpace
@@ -89,6 +91,8 @@ namespace ProcessorPluginSpace
 		int recordingNumber;
 
 		int64 timestamp;
+		std::chrono::system_clock::time_point recordingStartTime;
+		
 
 	};
 }
