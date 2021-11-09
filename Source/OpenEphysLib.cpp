@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <PluginInfo.h>
 #include "RecordEnginePlugin.h"
+#include "ProcessorPlugin.h"
 #include <string>
 
 #ifdef WIN32
@@ -33,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using namespace Plugin;
 //Number of plugins defined on the library. Can be of different types (Processors, RecordEngines, etc...)
-#define NUM_PLUGINS 1
+#define NUM_PLUGINS 2
 
 extern "C" EXPORT void getLibInfo(Plugin::LibraryInfo* info)
 {
@@ -56,21 +57,25 @@ extern "C" EXPORT int getPluginInfo(int index, Plugin::PluginInfo* info)
 	{
 		//one case per plugin. This example is for a processor which connects directly to the signal chain
 	case 0:
-		// //Type of plugin. See "Source/Processors/PluginManager/OpenEphysPlugin.h" for complete info about the different type structures
-		// info->type = PluginType::PLUGIN_TYPE_PROCESSOR;
-		// //Processor name
-		// info->processor.name = "PrecisionTimestampedOutputFile"; //Processor name shown in the GUI
-		// //Type of processor. Can be FilterProcessor, SourceProcessor, SinkProcessor or UtilityProcessor. Specifies where on the processor list will appear
-		// info->processor.type = ProcessorType::SinkProcessor; // I changed this, how does this differ froma  RecordEngine plugin?
-		// //Class factory pointer. Replace "ProcessorPluginSpace::ProcessorPlugin" with the namespace and class name.
-		// info->processor.creator = &(Plugin::createProcessor<ProcessorPluginSpace::ProcessorPlugin>);
-		// break;
+
 
 		// For a RecordEngine, which provides formats for recording data:
 		// Must implement writeData(), writeEvent(), and writeSpike() methods of RecordEngine.h
 		info->type = Plugin::PLUGIN_TYPE_RECORD_ENGINE;
 		info->recordEngine.name = "Precision Timestamped Output File"; //Record Engine name
 		info->recordEngine.creator = &(Plugin::createRecordEngine<RecordEnginePlugin>); // Replace "RecordEngineClassName" with the namespace and class name of your plugin
+		break;
+
+	case 1:
+
+		//Type of plugin. See "Source/Processors/PluginManager/OpenEphysPlugin.h" for complete info about the different type structures
+		info->type = PluginType::PLUGIN_TYPE_PROCESSOR;
+		//Processor name
+		info->processor.name = "Precision Start System Timestamp"; //Processor name shown in the GUI
+		//Type of processor. Can be FilterProcessor, SourceProcessor, SinkProcessor or UtilityProcessor. Specifies where on the processor list will appear
+		info->processor.type = ProcessorType::SinkProcessor; // I changed this, how does this differ froma  RecordEngine plugin?
+		//Class factory pointer. Replace "ProcessorPluginSpace::ProcessorPlugin" with the namespace and class name.
+		info->processor.creator = &(Plugin::createProcessor<ProcessorPluginSpace::PhoProcessorPlugin>);
 		break;
 
 		/**
