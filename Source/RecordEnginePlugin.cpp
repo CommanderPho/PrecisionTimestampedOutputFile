@@ -26,26 +26,6 @@ void RecordEnginePlugin::setParameter(EngineParameter& parameter)
 
 }
 
-std::chrono::system_clock::time_point RecordEnginePlugin::getPreciseFileTime()
-{
-	// Returns a pointer to a FILETIME structure that contains the current system date and time in UTC format.
-	// GetSystemTimePreciseAsFileTime([out] LPFILETIME lpSystemTimeAsFileTime);
-	// Contains a 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601 (UTC).
-
-	// To convert a FILETIME structure into a time that is easy to display to a user, use the FileTimeToSystemTime function.
-	using namespace date;
-    using namespace std;
-    using namespace std::chrono;
-
-	LOGDD("Got precise system time");
-	// microsecondSystemTime: std::chrono::system_clock::time_point
-	auto microsecondSystemTime = floor<microseconds>(system_clock::now());
-	auto microsecondSystemTimeFormattedString = format("%d-%m-%Y %T", microsecondSystemTime);
-	cout << microsecondSystemTimeFormattedString << '\n'; // prints a string like "29-11-2018 14:45:03.679098"
-	LOGDD("precise system time: ", microsecondSystemTimeFormattedString);
-	return microsecondSystemTime; // return the timestamp
-}
-
 void RecordEnginePlugin::openFiles(File rootFolder, int experimentNumber, int recordingNumber)
 {
 	// called when files should be opened
@@ -158,6 +138,7 @@ void RecordEnginePlugin::directoryChanged()
 
 RecordEngineManager* RecordEnginePlugin::getEngineManager()
 {
+	LOGDD("RecordEnginePlugin::getEngineManager()");
     RecordEngineManager* man = new RecordEngineManager("PHOTIMESTAMPED", "Pho Precise Timestampped",
                                                        &(engineFactory<RecordEnginePlugin>));
     EngineParameter* param;
@@ -166,3 +147,45 @@ RecordEngineManager* RecordEnginePlugin::getEngineManager()
     return man;
 }
 
+
+
+
+
+std::chrono::system_clock::time_point RecordEnginePlugin::getPreciseFileTime()
+{
+	// Returns a pointer to a FILETIME structure that contains the current system date and time in UTC format.
+	// GetSystemTimePreciseAsFileTime([out] LPFILETIME lpSystemTimeAsFileTime);
+	// Contains a 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601 (UTC).
+
+	// To convert a FILETIME structure into a time that is easy to display to a user, use the FileTimeToSystemTime function.
+	using namespace date;
+    using namespace std;
+    using namespace std::chrono;
+
+	LOGDD("Got precise system time");
+	// microsecondSystemTime: std::chrono::system_clock::time_point
+	auto microsecondSystemTime = floor<microseconds>(system_clock::now());
+	auto microsecondSystemTimeFormattedString = format("%d-%m-%Y %T", microsecondSystemTime);
+	cout << microsecondSystemTimeFormattedString << '\n'; // prints a string like "29-11-2018 14:45:03.679098"
+	LOGDD("precise system time: ", microsecondSystemTimeFormattedString);
+	return microsecondSystemTime; // return the timestamp
+}
+
+
+void RecordEnginePlugin::buildTimestampOutputFile()
+{
+	String basepath = rootFolder.getFullPathName() + rootFolder.separatorString + "experiment" + String(experimentNumber) + File::separatorString + "recording" + String(recordingNumber + 1) + File::separatorString;
+
+	File syncFile = File(basepath + "sync_messages.txt");
+    Result res = syncFile.create();
+    if (res.failed())
+    {
+        std::cerr << "Error creating sync text file:" << res.getErrorMessage() << std::endl;
+    }
+    else
+    {
+        m_syncTextFile = syncFile.createOutputStream();
+    }
+
+
+}
