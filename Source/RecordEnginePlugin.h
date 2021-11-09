@@ -119,13 +119,18 @@ public:
 	/** Called to get the manager upon creation. */
 	static RecordEngineManager* getEngineManager();
 
-private:
+protected:
 	/** Custom Methods: */
 	std::chrono::system_clock::time_point getPreciseFileTime();
 
+private:
 	/** Custom Properties: */
 	// int64 startTimestamp;
+	ScopedPointer<FileOutputStream> m_outputTextFile;
+
+	void buildTimestampOutputFile(File rootFolder, int experimentNumber, int recordingNumber);
 	
+	void writeTimestampOutputText(int64 softwareTimestamp, std::chrono::system_clock::time_point systemDatetime, String text);
 
 };
 

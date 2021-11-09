@@ -31,12 +31,16 @@ void RecordEnginePlugin::openFiles(File rootFolder, int experimentNumber, int re
 {
 	// called when files should be opened
 	LOGDD("RecordEnginePlugin::openFiles()");
+	auto microsecondSystemTime = getPreciseFileTime();
+	buildTimestampOutputFile(rootFolder, experimentNumber, recordingNumber);
+	writeTimestampOutputText(0, microsecondSystemTime, "START");
 }
 
 void RecordEnginePlugin::closeFiles()
 {
 	// called when files should be closed
 	LOGDD("RecordEnginePlugin::closeFiles()");
+	resetChannels();
 }
 
 void RecordEnginePlugin::startChannelBlock(bool lastBlock)
@@ -46,7 +50,7 @@ void RecordEnginePlugin::startChannelBlock(bool lastBlock)
 
 void RecordEnginePlugin:: writeData(int writeChannel, int realChannel, const float* buffer, int size)
 {
-
+	
 }
 
 void RecordEnginePlugin::writeSynchronizedData(int writeChannel, 
@@ -100,12 +104,14 @@ void RecordEnginePlugin::addSpikeElectrode(int index, const SpikeChannel* elec)
 
 void RecordEnginePlugin::writeSpike(int electrodeIndex, const SpikeEvent* spike)
 {
-
+//	int64 ts = spike->getTimestamp();
+//	rec->timestampFile->writeData(&ts, sizeof(int64));
 }
 
 void RecordEnginePlugin::resetChannels()
 {
 	LOGDD("RecordEnginePlugin::resetChannels()");
+	m_outputTextFile = nullptr;
 }
 
 void RecordEnginePlugin::updateTimestamps(const Array<int64>& timestamps, int channel)
@@ -152,7 +158,11 @@ RecordEngineManager* RecordEnginePlugin::getEngineManager()
 
 
 
-
+/* Usage:
+	auto microsecondSystemTime = getPreciseFileTime();
+	buildTimestampOutputFile(File rootFolder, int experimentNumber, int recordingNumber);
+	writeTimestampOutputText(int64 softwareTimestamp, microsecondSystemTime, "START");
+ */
 
 std::chrono::system_clock::time_point RecordEnginePlugin::getPreciseFileTime()
 {
@@ -168,7 +178,9 @@ std::chrono::system_clock::time_point RecordEnginePlugin::getPreciseFileTime()
 	LOGDD("Got precise system time");
 	// microsecondSystemTime: std::chrono::system_clock::time_point
 	auto microsecondSystemTime = floor<microseconds>(system_clock::now());
-	auto microsecondSystemTimeFormattedString = format("%d-%m-%Y %T", microsecondSystemTime);
+	// auto microsecondSystemTimeFormattedString = format("%d-%m-%Y %T", microsecondSystemTime);
+	auto microsecondSystemTimeFormattedString = format("%Y-%m-%d_%T", microsecondSystemTime);
+
 	cout << microsecondSystemTimeFormattedString << '\n'; // prints a string like "29-11-2018 14:45:03.679098"
 	LOGDD("precise system time: ", microsecondSystemTimeFormattedString);
 	CoreServices::sendStatusMessage(microsecondSystemTimeFormattedString);
@@ -177,20 +189,31 @@ std::chrono::system_clock::time_point RecordEnginePlugin::getPreciseFileTime()
 }
 
 
-void RecordEnginePlugin::buildTimestampOutputFile()
+void RecordEnginePlugin::buildTimestampOutputFile(File rootFolder, int experimentNumber, int recordingNumber)
 {
 	String basepath = rootFolder.getFullPathName() + rootFolder.separatorString + "experiment" + String(experimentNumber) + File::separatorString + "recording" + String(recordingNumber + 1) + File::separatorString;
 
-	File syncFile = File(basepath + "sync_messages.txt");
-    Result res = syncFile.create();
+	File outputFile = File(basepath + "RecordingStartSystemDatetime.csv");
+    Result res = outputFile.create();
     if (res.failed())
     {
         std::cerr << "Error creating sync text file:" << res.getErrorMessage() << std::endl;
     }
     else
     {
-        m_syncTextFile = syncFile.createOutputStream();
+        m_outputTextFile = outputFile.createOutputStream();
+		m_outputTextFile->writeText("softwareTimestamp, microsecondSystemTimeFormattedString, textDescription\n", false, false); // Write the header line
     }
-
-
 }
+
+void RecordEnginePlugin::writeTimestampOutputText(int64 softwareTimestamp, std::chrono::system_clock::time_point systemDatetime, String text)
+{
+	if (!m_outputTextFile)
+		return;
+
+	auto microsecondSystemTimeFormattedString = date::format("%Y-%m-%d_%T", systemDatetime);
+//	m_outputTextFile->writeData(&softwareTimestamp, sizeof(int64));
+	m_outputTextFile->writeText(String(softwareTimestamp) + ", " + microsecondSystemTimeFormattedString + ", " + text + "\n", false, false);
+}
+
+
