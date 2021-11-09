@@ -8,12 +8,12 @@
 
 RecordEnginePlugin::RecordEnginePlugin() 
 {
-
+	LOGDD("RecordEnginePlugin Initializer");
 }
 	
 RecordEnginePlugin::~RecordEnginePlugin() 
 {
-
+	LOGDD("RecordEnginePlugin Deinitializer");
 }
 
 String RecordEnginePlugin::getEngineID() const 
@@ -37,20 +37,25 @@ std::chrono::system_clock::time_point RecordEnginePlugin::getPreciseFileTime()
     using namespace std;
     using namespace std::chrono;
 
+	LOGDD("Got precise system time");
 	// microsecondSystemTime: std::chrono::system_clock::time_point
 	auto microsecondSystemTime = floor<microseconds>(system_clock::now());
-	cout << format("%d-%m-%Y %T", microsecondSystemTime) << '\n'; // prints a string like "29-11-2018 14:45:03.679098"
+	auto microsecondSystemTimeFormattedString = format("%d-%m-%Y %T", microsecondSystemTime);
+	cout << microsecondSystemTimeFormattedString << '\n'; // prints a string like "29-11-2018 14:45:03.679098"
+	LOGDD("precise system time: ", microsecondSystemTimeFormattedString);
 	return microsecondSystemTime; // return the timestamp
 }
 
 void RecordEnginePlugin::openFiles(File rootFolder, int experimentNumber, int recordingNumber)
 {
 	// called when files should be opened
+	LOGDD("RecordEnginePlugin::openFiles()");
 }
 
 void RecordEnginePlugin::closeFiles()
 {
 	// called when files should be closed
+	LOGDD("RecordEnginePlugin::closeFiles()");
 }
 
 void RecordEnginePlugin::startChannelBlock(bool lastBlock)
@@ -119,7 +124,7 @@ void RecordEnginePlugin::writeSpike(int electrodeIndex, const SpikeEvent* spike)
 
 void RecordEnginePlugin::resetChannels()
 {
-
+	LOGDD("RecordEnginePlugin::resetChannels()");
 }
 
 void RecordEnginePlugin::updateTimestamps(const Array<int64>& timestamps, int channel)
@@ -142,12 +147,13 @@ void RecordEnginePlugin::registerRecordNode(RecordNode* node)
 
 void RecordEnginePlugin::startAcquisition()
 {
-
+	LOGDD("RecordEnginePlugin::startAcquisition()");
 }
 
 void RecordEnginePlugin::directoryChanged()
 {
-
+	LOGDD("RecordEnginePlugin::directoryChanged()");
+	std::chrono::system_clock::time_point currTime = getPreciseFileTime();
 }
 
 RecordEngineManager* RecordEnginePlugin::getEngineManager()

@@ -122,6 +122,11 @@ public:
 private:
 	/** Custom Methods: */
 	std::chrono::system_clock::time_point getPreciseFileTime();
+
+	/** Custom Properties: */
+	// int64 startTimestamp;
+	
+
 };
 
 #endif
