@@ -49,16 +49,16 @@ namespace ProcessorPluginSpace
 		*/
 		//void handleSpike(const SpikeChannel* spikeInfo, const MidiMessage& event, int samplePosition) override;
 
-		/** The method that standard controls on the editor will call.
-		It is recommended that any variables used by the "process" function
-		are modified only through this method while data acquisition is active. */
-		//void setParameter(int parameterIndex, float newValue) override;
+		// /** The method that standard controls on the editor will call.
+		// It is recommended that any variables used by the "process" function
+		// are modified only through this method while data acquisition is active. */
+		// void setParameter(int parameterIndex, float newValue) override;
 
-		/** Saving custom settings to XML. */
-		//void saveCustomParametersToXml(XmlElement* parentElement) override;
+		// /** Saving custom settings to XML. */
+		void saveCustomParametersToXml(XmlElement* parentElement) override;
 
-		/** Load custom settings from XML*/
-		//void loadCustomParametersFromXml() override;
+		// /** Load custom settings from XML*/
+		void loadCustomParametersFromXml() override;
 
 		/** Optional method called every time the signal chain is refreshed or changed in any way.
 
@@ -68,7 +68,27 @@ namespace ProcessorPluginSpace
 		structure shouldn't be manipulated outside of this method.
 
 		*/
-		//void updateSettings() override;
+		void updateSettings() override;
+
+
+		// start and stop Recordings
+		void startRecording() override;
+		void stopRecording() override;
+
+	private:
+		bool isProcessing;
+		bool isRecording;
+		bool hasRecorded;
+		bool settingsNeeded;
+		bool shouldRecord;
+
+		File dataDirectory;
+		File rootFolder;
+
+		int experimentNumber;
+		int recordingNumber;
+
+		int64 timestamp;
 
 	};
 }

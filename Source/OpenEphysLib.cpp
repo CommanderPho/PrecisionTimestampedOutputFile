@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <PluginInfo.h>
 #include "RecordEnginePlugin.h"
-#include "ProcessorPlugin.h"
+#include "PhoProcessorPlugin.h"
 #include <string>
 
 #ifdef WIN32

@@ -120,8 +120,8 @@ public:
 	static RecordEngineManager* getEngineManager();
 
 	// GenericProcessor Parameter Methods:
-	void saveCustomParametersToXml(XmlElement *parentElement)
-	void loadCustomParametersFromXml ()
+	void saveCustomParametersToXml(XmlElement *parentElement);
+	void loadCustomParametersFromXml();
 
 
 protected:
