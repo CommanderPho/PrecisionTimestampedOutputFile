@@ -4,7 +4,7 @@
 using namespace ProcessorPluginSpace;
 
 //Change all names for the relevant ones, including "Processor Name"
-PhoProcessorPlugin::PhoProcessorPlugin() : GenericProcessor("Pho StartTimestamp Processor")
+PhoProcessorPlugin::PhoProcessorPlugin() : GenericProcessor("PhoStartTimestamp Processor")
 {
 
 }
@@ -47,7 +47,7 @@ void PhoProcessorPlugin::updateSettings()
 // GenericProcessor Parameter Methods:
 void PhoProcessorPlugin::saveCustomParametersToXml(XmlElement *parentElement)
 {
-	XmlElement* mainNode = parentElement->createNewChildElement("PhoProcessorPlugin");
+	XmlElement* mainNode = parentElement->createNewChildElement("PhoStartTimestampPlugin");
 
    	// Create the timestamp child element:
    	XmlElement* recordingStartTimestampNode = new XmlElement("RecordingStartTimestamp");
@@ -76,7 +76,7 @@ void PhoProcessorPlugin::loadCustomParametersFromXml()
    {
        forEachXmlChildElement (*parametersAsXml, mainNode)
        {
-           if (mainNode->hasTagName("PhoProcessorPlugin"))
+           if (mainNode->hasTagName("PhoStartTimestampPlugin"))
            {
                forEachXmlChildElement(*mainNode, aRecordingStartTimestampNode)
                {
