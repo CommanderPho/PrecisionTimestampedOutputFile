@@ -9,6 +9,7 @@
 RecordEnginePlugin::RecordEnginePlugin() 
 {
 	LOGDD("RecordEnginePlugin Initializer");
+	CoreServices::sendStatusMessage("RecordEnginePlugin Initializer");
 }
 	
 RecordEnginePlugin::~RecordEnginePlugin() 
@@ -128,11 +129,13 @@ void RecordEnginePlugin::registerRecordNode(RecordNode* node)
 void RecordEnginePlugin::startAcquisition()
 {
 	LOGDD("RecordEnginePlugin::startAcquisition()");
+	CoreServices::sendStatusMessage("RecordEnginePlugin::startAcquisition()");
 }
 
 void RecordEnginePlugin::directoryChanged()
 {
 	LOGDD("RecordEnginePlugin::directoryChanged()");
+	CoreServices::sendStatusMessage("RecordEnginePlugin::directoryChanged()");
 	std::chrono::system_clock::time_point currTime = getPreciseFileTime();
 }
 
@@ -168,6 +171,8 @@ std::chrono::system_clock::time_point RecordEnginePlugin::getPreciseFileTime()
 	auto microsecondSystemTimeFormattedString = format("%d-%m-%Y %T", microsecondSystemTime);
 	cout << microsecondSystemTimeFormattedString << '\n'; // prints a string like "29-11-2018 14:45:03.679098"
 	LOGDD("precise system time: ", microsecondSystemTimeFormattedString);
+	CoreServices::sendStatusMessage(microsecondSystemTimeFormattedString);
+
 	return microsecondSystemTime; // return the timestamp
 }
 
