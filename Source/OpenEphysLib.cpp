@@ -56,18 +56,17 @@ extern "C" EXPORT int getPluginInfo(int index, Plugin::PluginInfo* info)
 	switch (index)
 	{
 		//one case per plugin. This example is for a processor which connects directly to the signal chain
+	// case 0:
+
+
+	// 	// For a RecordEngine, which provides formats for recording data:
+	// 	// Must implement writeData(), writeEvent(), and writeSpike() methods of RecordEngine.h
+	// 	info->type = Plugin::PLUGIN_TYPE_RECORD_ENGINE;
+	// 	info->recordEngine.name = "Precision Timestamped Output File"; //Record Engine name
+	// 	info->recordEngine.creator = &(Plugin::createRecordEngine<RecordEnginePlugin>); // Replace "RecordEngineClassName" with the namespace and class name of your plugin
+	// 	break;
+
 	case 0:
-
-
-		// For a RecordEngine, which provides formats for recording data:
-		// Must implement writeData(), writeEvent(), and writeSpike() methods of RecordEngine.h
-		info->type = Plugin::PLUGIN_TYPE_RECORD_ENGINE;
-		info->recordEngine.name = "Precision Timestamped Output File"; //Record Engine name
-		info->recordEngine.creator = &(Plugin::createRecordEngine<RecordEnginePlugin>); // Replace "RecordEngineClassName" with the namespace and class name of your plugin
-		break;
-
-	case 1:
-
 		//Type of plugin. See "Source/Processors/PluginManager/OpenEphysPlugin.h" for complete info about the different type structures
 		info->type = PluginType::PLUGIN_TYPE_PROCESSOR;
 		//Processor name
