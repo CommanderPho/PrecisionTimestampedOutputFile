@@ -34,6 +34,7 @@ void PhoProcessorPlugin::process(AudioSampleBuffer& buffer)
 		//Do whatever processing needed
 	}
 
+	// Called whenever a new data array is provided:
 	if (needsWriteToCustomTimstampSyncFile) {
 		bool wasWritingSuccess = PhoTimesyncFileHelperSpace::writeOutCustomFile(recordingStartTime);
 		if (wasWritingSuccess) {
@@ -54,6 +55,20 @@ void PhoProcessorPlugin::process(AudioSampleBuffer& buffer)
 void PhoProcessorPlugin::updateSettings()
 {
 	// PhoDatetimeTimestampHelperSpace::getPreciseFileTimeString();
+
+	// Called whenever any part of the processing chain is updated:
+	// if (needsWriteToCustomTimstampSyncFile) {
+	// 	bool wasWritingSuccess = PhoTimesyncFileHelperSpace::writeOutCustomFile(recordingStartTime);
+	// 	if (wasWritingSuccess) {
+	// 		needsWriteToCustomTimstampSyncFile = false;
+	// 	}
+	// 	else {
+	// 		// ERROR
+	// 		needsWriteToCustomTimstampSyncFile = false;
+	// 		std::cout << "Couldn't succeed in writing out file, aborting custom file write anyway!" << std::endl;
+	// 	}
+	// }
+
 }
 
 // GenericProcessor Parameter Methods:
@@ -116,6 +131,20 @@ void PhoProcessorPlugin::startRecording()
 	recordingStartTime = PhoDatetimeTimestampHelperSpace::getPreciseFileTime();
 	hasRecorded = true;
 	needsWriteToCustomTimstampSyncFile = true;
+
+	//TODO: this obviously shouldn't be here for efficiency reasons
+	if (needsWriteToCustomTimstampSyncFile) {
+		bool wasWritingSuccess = PhoTimesyncFileHelperSpace::writeOutCustomFile(recordingStartTime);
+		if (wasWritingSuccess) {
+			needsWriteToCustomTimstampSyncFile = false;
+		}
+		else {
+			// ERROR
+			needsWriteToCustomTimstampSyncFile = false;
+			std::cout << "Couldn't succeed in writing out file, aborting custom file write anyway!" << std::endl;
+		}
+	}
+
 }
 
 // called by GenericProcessor::setRecording()
