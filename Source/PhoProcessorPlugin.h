@@ -93,22 +93,20 @@ namespace ProcessorPluginSpace
 		bool isProcessing;
 		bool isRecording;
 		bool hasRecorded;
-		bool settingsNeeded;
-		bool shouldRecord;
+		// bool settingsNeeded;
+		// bool shouldRecord;
 
-		File dataDirectory;
-		File rootFolder;
+		// File dataDirectory;
+		// File rootFolder;
+		bool needsWriteToCustomTimstampSyncFile;
 
-		int experimentNumber;
-		int recordingNumber;
+		// int experimentNumber;
+		// int recordingNumber;
 
 		int64 timestamp;
 		std::chrono::system_clock::time_point recordingStartTime;
-		
 
 		JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PhoProcessorPlugin);
-
-
 	};
 }
 
