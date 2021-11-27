@@ -1,7 +1,48 @@
+#include <stdio.h>
 #include "PhoProcessorPlugin.h"
 #include "PhoDatetimeTimestampHelper.h"
 
 using namespace ProcessorPluginSpace;
+
+class SystemAndSoftwareSynchTS
+{
+public:
+	SystemAndSoftwareSynchTS(std::chrono::system_clock::time_point system_ts, juce::int64 src_ts, juce::int64 sw_ts)
+	{
+		systemClockTimepoint = system_ts;
+		sourceTimestamp = src_ts;
+		softwareTimestamp = sw_ts;
+	}
+
+	~SystemAndSoftwareSynchTS()
+	{
+
+	}
+
+	std::chrono::system_clock::time_point getSystemClockTimepoint()
+	{
+		return systemClockTimepoint;
+	}
+
+	juce::int64 getSourceTimestamp()
+	{
+		return sourceTimestamp;
+	}
+
+	juce::int64 getSoftwareTimestamp()
+	{
+		return softwareTimestamp;
+	}
+
+private:
+	std::chrono::system_clock::time_point systemClockTimepoint;
+	juce::int64 sourceTimestamp;
+	juce::int64 softwareTimestamp;
+};
+
+
+
+
 
 //Change all names for the relevant ones, including "Processor Name"
 PhoProcessorPlugin::PhoProcessorPlugin() : GenericProcessor("PhoStartTimestamp Processor")
@@ -11,7 +52,7 @@ PhoProcessorPlugin::PhoProcessorPlugin() : GenericProcessor("PhoStartTimestamp P
 
 PhoProcessorPlugin::~PhoProcessorPlugin()
 {
-
+	delete writeThread;
 }
 
 void PhoProcessorPlugin::process(AudioSampleBuffer& buffer)
@@ -40,8 +81,7 @@ void PhoProcessorPlugin::process(AudioSampleBuffer& buffer)
 // called by GenericProcessor::update()
 void PhoProcessorPlugin::updateSettings()
 {
-	PhoDatetimeTimestampHelperSpace::getPreciseFileTimeString();
-
+	// PhoDatetimeTimestampHelperSpace::getPreciseFileTimeString();
 }
 
 // GenericProcessor Parameter Methods:
@@ -111,3 +151,28 @@ void PhoProcessorPlugin::stopRecording()
 	isRecording = false;
 
 }
+
+
+
+
+
+void PhoProcessorPlugin::setDirectoryName(String name)
+{
+	if (name != getDirectoryName())
+	{
+		if (File::createLegalFileName(name) == name)
+		{
+			dirName = name;
+		}
+		else
+		{
+			std::cout << "FrameGrabber invalid directory name: " << name.toStdString() << "\n";
+		}
+	}
+}
+
+String PhoProcessorPlugin::getDirectoryName()
+{
+	return dirName;
+}
+
