@@ -20,10 +20,7 @@
 //namespace must be an unique name for your plugin
 namespace ProcessorPluginSpace
 {
-
-	class WriteThread;
-
-	class PhoProcessorPlugin : public GenericProcessor,  public Thread
+	class PhoProcessorPlugin : public GenericProcessor
 	{
 	public:
 		/** The class constructor, used to initialize any members. */
@@ -92,11 +89,6 @@ namespace ProcessorPluginSpace
 		void stopRecording() override;
 
 		// I seem to be missing void run();
-
-		void setDirectoryName(String name);
-		String getDirectoryName();
-
-
 	private:
 		bool isProcessing;
 		bool isRecording;
@@ -112,15 +104,7 @@ namespace ProcessorPluginSpace
 
 		int64 timestamp;
 		std::chrono::system_clock::time_point recordingStartTime;
-
-		// New threading features:
-		bool threadRunning;
-		// File framePath;
-		String dirName;
-
-		WriteThread* writeThread;
 		
-		CriticalSection lock;
 
 		JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PhoProcessorPlugin);
 
