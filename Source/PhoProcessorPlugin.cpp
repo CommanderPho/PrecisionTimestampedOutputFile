@@ -1,10 +1,11 @@
 #include "PhoProcessorPlugin.h"
 #include "PhoDatetimeTimestampHelper.h"
+#include "PhoTimesyncFileHelper.h"
 
 using namespace ProcessorPluginSpace;
 
 //Change all names for the relevant ones, including "Processor Name"
-PhoProcessorPlugin::PhoProcessorPlugin() : GenericProcessor("PhoStartTimestamp Processor")
+PhoProcessorPlugin::PhoProcessorPlugin() : GenericProcessor("PhoStartTimestamp Processor"), needsWriteToCustomTimstampSyncFile(false)
 {
 
 }
@@ -31,6 +32,18 @@ void PhoProcessorPlugin::process(AudioSampleBuffer& buffer)
 		int64 timestamp = getTimestamp(chan);
 
 		//Do whatever processing needed
+	}
+
+	if (needsWriteToCustomTimstampSyncFile) {
+		bool wasWritingSuccess = PhoTimesyncFileHelperSpace::writeOutCustomFile(recordingStartTime);
+		if (wasWritingSuccess) {
+			needsWriteToCustomTimstampSyncFile = false;
+		}
+		else {
+			// ERROR
+			needsWriteToCustomTimstampSyncFile = false;
+			std::cout << "Couldn't succeed in writing out file, aborting custom file write anyway!" << std::endl;
+		}
 	}
 	 
 }
@@ -102,6 +115,7 @@ void PhoProcessorPlugin::startRecording()
 	isRecording = true;
 	recordingStartTime = PhoDatetimeTimestampHelperSpace::getPreciseFileTime();
 	hasRecorded = true;
+	needsWriteToCustomTimstampSyncFile = true;
 }
 
 // called by GenericProcessor::setRecording()

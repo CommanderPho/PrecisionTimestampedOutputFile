@@ -17,7 +17,7 @@ namespace PhoTimesyncFileHelperSpace
 	// String getPreciseFileTimeString();
 
 	// PhoTimesyncFileHelperSpace::PhoTimesyncFileHelper::writeOutCustomFile(recordingStartTime)
-	bool PhoTimesyncFileHelper::writeOutCustomFile(std::chrono::system_clock::time_point recordingStartSavedTimestamp)
+	bool writeOutCustomFile(std::chrono::system_clock::time_point recordingStartSavedTimestamp) {
 		// Note that this destDirectory finds a subfolder!
 		// const File destDirectory (File::getCurrentWorkingDirectory()
 		// 							.getChildFile (String ("DestDirName").unquoted()));
