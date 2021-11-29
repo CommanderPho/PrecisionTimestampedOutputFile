@@ -4,13 +4,16 @@
 
 using namespace ProcessorPluginSpace;
 
+#define DEBUGLOGGING 1
 #define DRYRUN 1
 // #define CUSTOMFILE 1
 
 //Change all names for the relevant ones, including "Processor Name"
 PhoProcessorPlugin::PhoProcessorPlugin() : GenericProcessor("PhoStartTimestamp Processor"), isProcessing(false), isRecording(false), hasRecorded(false), needsWriteToCustomTimstampSyncFile(false), timestamp(-1), recordingStartTime(std::chrono::system_clock::time_point())
 {
-
+	#ifdef DEBUGLOGGING
+		CoreServices::sendStatusMessage("PhoProcessorPlugin::PhoProcessorPlugin(...)");
+	#endif
 }
 
 PhoProcessorPlugin::~PhoProcessorPlugin()
@@ -43,12 +46,18 @@ void PhoProcessorPlugin::writeCustomTimestampFileIfNeeded()
 
 	}
 }
+
+
 void PhoProcessorPlugin::process(AudioSampleBuffer& buffer)
 {
 	/** 
 	If the processor needs to handle events, this method must be called onyl once per process call
 	If spike processing is also needing, set the argument to true
 	*/
+	#ifdef DEBUGLOGGING
+		CoreServices::sendStatusMessage("PhoProcessorPlugin::process(...)");
+	#endif
+
 	isProcessing = true;
 
 	//checkForEvents(false);
@@ -93,6 +102,10 @@ void PhoProcessorPlugin::updateSettings()
 // GenericProcessor Parameter Methods:
 void PhoProcessorPlugin::saveCustomParametersToXml(XmlElement *parentElement)
 {
+	#ifdef DEBUGLOGGING
+		CoreServices::sendStatusMessage("PhoProcessorPlugin::saveCustomParametersToXml(...)");
+	#endif
+
 	XmlElement* mainNode = parentElement->createNewChildElement("PhoStartTimestampPlugin");
 
    	// Create the timestamp child element:
@@ -118,6 +131,9 @@ void PhoProcessorPlugin::saveCustomParametersToXml(XmlElement *parentElement)
 
 void PhoProcessorPlugin::loadCustomParametersFromXml()
 {
+	#ifdef DEBUGLOGGING
+		CoreServices::sendStatusMessage("PhoProcessorPlugin::loadCustomParametersFromXml(...)");
+	#endif
    if (parametersAsXml != nullptr)
    {
        forEachXmlChildElement (*parametersAsXml, mainNode)
@@ -146,6 +162,9 @@ void PhoProcessorPlugin::loadCustomParametersFromXml()
 // called by GenericProcessor::setRecording()
 void PhoProcessorPlugin::startRecording()
 {
+	#ifdef DEBUGLOGGING
+		CoreServices::sendStatusMessage("PhoProcessorPlugin::startRecording(...)");
+	#endif
 	isRecording = true;
 	recordingStartTime = PhoDatetimeTimestampHelperSpace::getPreciseFileTime();
 	hasRecorded = true;
@@ -161,5 +180,8 @@ void PhoProcessorPlugin::startRecording()
 // called by GenericProcessor::setRecording()
 void PhoProcessorPlugin::stopRecording()
 {
+	#ifdef DEBUGLOGGING
+		CoreServices::sendStatusMessage("PhoProcessorPlugin::stopRecording(...)");
+	#endif
 	isRecording = false;
 }
