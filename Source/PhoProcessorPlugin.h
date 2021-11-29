@@ -109,7 +109,7 @@ namespace ProcessorPluginSpace
 		int64 timestamp;
 		std::chrono::system_clock::time_point recordingStartTime;
 
-		// JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PhoProcessorPlugin);
+		JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PhoProcessorPlugin);
 	};
 }
 
