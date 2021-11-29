@@ -88,6 +88,9 @@ namespace ProcessorPluginSpace
 		void startRecording() override;
 		void stopRecording() override;
 
+	protected:
+		void writeCustomTimestampFileIfNeeded();
+
 		// I seem to be missing void run();
 	private:
 		bool isProcessing;

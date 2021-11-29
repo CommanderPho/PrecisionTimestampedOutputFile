@@ -4,8 +4,10 @@
 
 using namespace ProcessorPluginSpace;
 
+#define DRYRUN 1
+
 //Change all names for the relevant ones, including "Processor Name"
-PhoProcessorPlugin::PhoProcessorPlugin() : GenericProcessor("PhoStartTimestamp Processor"), needsWriteToCustomTimstampSyncFile(false)
+PhoProcessorPlugin::PhoProcessorPlugin() : GenericProcessor("PhoStartTimestamp Processor"), isProcessing(false), isRecording(false), hasRecorded(false), needsWriteToCustomTimstampSyncFile(false), timestamp(-1), recordingStartTime(std::chrono::system_clock::time_point())
 {
 
 }
@@ -15,6 +17,31 @@ PhoProcessorPlugin::~PhoProcessorPlugin()
 
 }
 
+void PhoProcessorPlugin::writeCustomTimestampFileIfNeeded()
+{
+	#ifdef DEBUGLOGGING
+		CoreServices::sendStatusMessage("PhoProcessorPlugin::writeCustomTimestampFileIfNeeded(...)");
+	#endif
+	// Called whenever a new data array is provided:
+	if (needsWriteToCustomTimstampSyncFile) {
+		#ifdef DRYRUN
+			std::cout << "PhoProcessorPlugin::writeCustomTimestampFileIfNeeded(...): not writing file out because this is a dry-run, change #define DRYRUN 1 line." << std::endl;
+			bool wasWritingSuccess = true;
+		#else
+			bool wasWritingSuccess = PhoTimesyncFileHelperSpace::writeOutCustomFile(recordingStartTime);
+			
+		#endif
+		if (wasWritingSuccess) {
+			needsWriteToCustomTimstampSyncFile = false;
+		}
+		else {
+			// ERROR
+			needsWriteToCustomTimstampSyncFile = false;
+			std::cout << "Couldn't succeed in writing out file, aborting custom file write anyway!" << std::endl;
+		}
+
+	}
+}
 void PhoProcessorPlugin::process(AudioSampleBuffer& buffer)
 {
 	/** 
@@ -34,19 +61,7 @@ void PhoProcessorPlugin::process(AudioSampleBuffer& buffer)
 		//Do whatever processing needed
 	}
 
-	// Called whenever a new data array is provided:
-	if (needsWriteToCustomTimstampSyncFile) {
-		bool wasWritingSuccess = PhoTimesyncFileHelperSpace::writeOutCustomFile(recordingStartTime);
-		if (wasWritingSuccess) {
-			needsWriteToCustomTimstampSyncFile = false;
-		}
-		else {
-			// ERROR
-			needsWriteToCustomTimstampSyncFile = false;
-			std::cout << "Couldn't succeed in writing out file, aborting custom file write anyway!" << std::endl;
-		}
-	}
-	 
+	this->writeCustomTimestampFileIfNeeded();
 }
 
 
@@ -133,23 +148,11 @@ void PhoProcessorPlugin::startRecording()
 	needsWriteToCustomTimstampSyncFile = true;
 
 	//TODO: this obviously shouldn't be here for efficiency reasons
-	if (needsWriteToCustomTimstampSyncFile) {
-		bool wasWritingSuccess = PhoTimesyncFileHelperSpace::writeOutCustomFile(recordingStartTime);
-		if (wasWritingSuccess) {
-			needsWriteToCustomTimstampSyncFile = false;
-		}
-		else {
-			// ERROR
-			needsWriteToCustomTimstampSyncFile = false;
-			std::cout << "Couldn't succeed in writing out file, aborting custom file write anyway!" << std::endl;
-		}
-	}
-
+	this->writeCustomTimestampFileIfNeeded();
 }
 
 // called by GenericProcessor::setRecording()
 void PhoProcessorPlugin::stopRecording()
 {
 	isRecording = false;
-
 }
