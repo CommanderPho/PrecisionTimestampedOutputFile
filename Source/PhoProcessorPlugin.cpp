@@ -5,6 +5,7 @@
 using namespace ProcessorPluginSpace;
 
 #define DRYRUN 1
+// #define CUSTOMFILE 1
 
 //Change all names for the relevant ones, including "Processor Name"
 PhoProcessorPlugin::PhoProcessorPlugin() : GenericProcessor("PhoStartTimestamp Processor"), isProcessing(false), isRecording(false), hasRecorded(false), needsWriteToCustomTimstampSyncFile(false), timestamp(-1), recordingStartTime(std::chrono::system_clock::time_point())
@@ -61,7 +62,10 @@ void PhoProcessorPlugin::process(AudioSampleBuffer& buffer)
 		//Do whatever processing needed
 	}
 
-	this->writeCustomTimestampFileIfNeeded();
+	#ifdef CUSTOMFILE
+		this->writeCustomTimestampFileIfNeeded();
+	#endif
+	
 }
 
 
@@ -147,8 +151,11 @@ void PhoProcessorPlugin::startRecording()
 	hasRecorded = true;
 	needsWriteToCustomTimstampSyncFile = true;
 
-	//TODO: this obviously shouldn't be here for efficiency reasons
-	this->writeCustomTimestampFileIfNeeded();
+	#ifdef CUSTOMFILE
+		//TODO: this obviously shouldn't be here for efficiency reasons
+		this->writeCustomTimestampFileIfNeeded();
+	#endif
+
 }
 
 // called by GenericProcessor::setRecording()
