@@ -103,10 +103,11 @@ namespace ProcessorPluginSpace
 		// File rootFolder;
 		bool needsWriteToCustomTimstampSyncFile;
 
-		// int experimentNumber;
+		int curr_experiment_number;
 		// int recordingNumber;
-
-		int64 timestamp;
+		juce::int64 recordingStartSoftwareTimestamp;
+		// juce::int64 pluginUpdateFileTimeSoftwareTimestamp;
+		std::chrono::system_clock::time_point pluginInitializationTime;
 		std::chrono::system_clock::time_point recordingStartTime;
 
 		JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PhoProcessorPlugin);

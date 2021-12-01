@@ -7,7 +7,6 @@
 #include <iostream>
 // #include <string>
 #include <JuceHeader.h>
-#include <ProcessorHeaders.h>
 
 //class String;
 
@@ -26,27 +25,10 @@ bool writeOutCustomFile(std::chrono::system_clock::time_point recordingStartSave
 	// 							.getChildFile (String ("DestDirName").unquoted()));
 
 
-	// std::vector<RecordEngineManager*> engines = recordNode->getAvailableRecordEngines();
-	// for (int i = 0; i < engines.size(); i++)
-	// {
-	// 	engineSelectCombo->addItem(engines[i]->getName(), i + 1);
-	// }
-
-
 	// const File destDirectory (File::getCurrentWorkingDirectory());
-
 	const File destDirectory (CoreServices::getRecordingDirectory());
-
 	// const File destDirectory (CoreServices::getRecordingPath());
-	
 	// const File destDirectory (CoreServices::RecordNode::getRecordingPath());
-
-	// std::vector<RecordEngineManager*> curr_recording_engines = CoreServices::getAvailableRecordEngines();
-	// int curr_selected_recording_engine_idx = CoreServices::getSelectedRecordEngineIdx();
-	// auto curr_selected_recording_engine = curr_recording_engines[curr_selected_recording_engine_idx];
-	// auto curr_selected_recording_dir = curr_selected_recording_engine->getRecordingDirectory();
-
-	// destDirectory = curr_selected_recording_dir
 	
 	int curr_experiment_number = CoreServices::RecordNode::getExperimentNumber();
 	bool curr_recording_thread_status = CoreServices::RecordNode::getRecordThreadStatus();
