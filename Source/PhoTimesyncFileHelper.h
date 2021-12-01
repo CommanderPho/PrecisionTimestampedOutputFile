@@ -7,6 +7,7 @@
 #include <iostream>
 // #include <string>
 #include <JuceHeader.h>
+#include <ProcessorHeaders.h>
 
 //class String;
 
@@ -25,31 +26,48 @@ bool writeOutCustomFile(std::chrono::system_clock::time_point recordingStartSave
 	// 							.getChildFile (String ("DestDirName").unquoted()));
 
 
-	const File destDirectory (File::getCurrentWorkingDirectory());
+	// std::vector<RecordEngineManager*> engines = recordNode->getAvailableRecordEngines();
+	// for (int i = 0; i < engines.size(); i++)
+	// {
+	// 	engineSelectCombo->addItem(engines[i]->getName(), i + 1);
+	// }
 
-	// const File destDirectory (CoreServices::getRecordingDirectory());
+
+	// const File destDirectory (File::getCurrentWorkingDirectory());
+
+	const File destDirectory (CoreServices::getRecordingDirectory());
 
 	// const File destDirectory (CoreServices::getRecordingPath());
-
+	
 	// const File destDirectory (CoreServices::RecordNode::getRecordingPath());
-
-
 
 	// std::vector<RecordEngineManager*> curr_recording_engines = CoreServices::getAvailableRecordEngines();
 	// int curr_selected_recording_engine_idx = CoreServices::getSelectedRecordEngineIdx();
 	// auto curr_selected_recording_engine = curr_recording_engines[curr_selected_recording_engine_idx];
 	// auto curr_selected_recording_dir = curr_selected_recording_engine->getRecordingDirectory();
 
+	// destDirectory = curr_selected_recording_dir
+	
+	int curr_experiment_number = CoreServices::RecordNode::getExperimentNumber();
+	bool curr_recording_thread_status = CoreServices::RecordNode::getRecordThreadStatus();
+
+
 	CoreServices::sendStatusMessage("\t PhoTimesyncFileHelper::writeOutCustomFile: destDirectory: " + destDirectory.getFullPathName());
+	CoreServices::sendStatusMessage("\t \t curr_experiment_number: " + String(curr_experiment_number));
+	CoreServices::sendStatusMessage("\t \t curr_recording_thread_status: " + String(curr_recording_thread_status));
 
 	// const File destDirectory (CoreServices::RecordNode::getRecordingPath());
 	
-	juce::int64 getGlobalTimestamp();
+	// 
 
-	if (! destDirectory.isDirectory())
+	if (!destDirectory.isDirectory())
 	{
 		std::cout << "PhoTimesyncFileHelper::writeOutCustomFile: Destination directory doesn't exist: "
 				<< destDirectory.getFullPathName() << std::endl << std::endl;
+
+		// Create the directory if it doesn't exist
+		// destDirectory.createDirectory();
+		
 
 		if (enable_debug_printing) {
 			CoreServices::sendStatusMessage("\t PhoTimesyncFileHelper::writeOutCustomFile: destDirectory " + destDirectory.getFullPathName() + "doesn't exist. Aborting.");
@@ -64,7 +82,7 @@ bool writeOutCustomFile(std::chrono::system_clock::time_point recordingStartSave
 			CoreServices::sendStatusMessage("\t PhoTimesyncFileHelper::writeOutCustomFile: outputFilePath: " + String(outputFilePath.getFullPathName()));
 		}
 		String formattedRecordingStartTimeString = PhoDatetimeTimestampHelperSpace::formatPreciseFileTimeAsString(recordingStartSavedTimestamp);
-		auto outputLine = "startTime:\t" + formattedRecordingStartTimeString + "\r\n";
+		auto outputLine = "curr_experiment_number: " + String(curr_experiment_number) + "; startTime: " + formattedRecordingStartTimeString + "\r\n";
 		if (enable_debug_printing) {
 			CoreServices::sendStatusMessage(outputLine);
 		}
@@ -78,7 +96,10 @@ bool writeOutCustomFile(std::chrono::system_clock::time_point recordingStartSave
 			// CoreServices::sendStatusMessage(String(outputTimestampFile.getFullPathName()));
 			CoreServices::sendStatusMessage("\t PhoTimesyncFileHelper::writeOutCustomFile: outputFilePath: " + String(outputFilePath.getFullPathName()));
 		}
-		outputTimestampFile.deleteFile(); // This empties (deletes the contents of) the file
+
+		juce::int64 write_sw_timestamp = CoreServices::getGlobalTimestamp();
+
+		// outputTimestampFile.deleteFile(); // This empties (deletes the contents of) the file
 		std::unique_ptr<OutputStream> outputStream (outputTimestampFile.createOutputStream());
 		if (outputStream == nullptr)
 		{
@@ -90,10 +111,12 @@ bool writeOutCustomFile(std::chrono::system_clock::time_point recordingStartSave
 			return false;
 		}
 
+		//// Actual Output Portion:
 		String formattedRecordingStartTimeString = PhoDatetimeTimestampHelperSpace::formatPreciseFileTimeAsString(recordingStartSavedTimestamp);
 		// Finally, actually write to the output stream:
-		*outputStream << "startTime:\t" << formattedRecordingStartTimeString << "\r\n";
+		*outputStream << "startTime:\t" << formattedRecordingStartTimeString << ", curr_experiment_number: " << String(curr_experiment_number) << "\r\n";
 		outputStream = nullptr; // This closes the stream and should make sure the values are flushed out to the file
+		// auto outputLine = "curr_experiment_number: " + String(curr_experiment_number) + "; startTime: " + formattedRecordingStartTimeString + "\r\n";
 
 		std::cout << std::endl << " PhoTimesyncFileHelper::writeOutCustomFile: wrote to " << outputTimestampFile.getFullPathName() << ". Complete." << std::endl;
 		if (enable_debug_printing) {
