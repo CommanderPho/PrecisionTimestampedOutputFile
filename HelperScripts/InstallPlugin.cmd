@@ -15,13 +15,13 @@ set PROGRAM_PLUGINS_PATH=C:\Users\Pho\repos\OpenEphys\plugin-GUI\Build\Debug\plu
 
 echo Installing to %PROGRAM_PLUGINS_PATH%
 copy "%PLUGIN_DIR%\PrecisionTimestampedOutputFile.dll" "%PROGRAM_PLUGINS_PATH%\PrecisionTimestampedOutputFile.dll"
-copy "%PLUGIN_DIR%\PrecisionTimestampedOutputFile.pdb" "%PROGRAM_PLUGINS_PATH%\PrecisionTimestampedOutputFile.pdb"
+@REM copy "%PLUGIN_DIR%\PrecisionTimestampedOutputFile.pdb" "%PROGRAM_PLUGINS_PATH%\PrecisionTimestampedOutputFile.pdb"
 echo Done
 
 
 echo Installing to %OFFICIAL_PROGRAM_PLUGINS_PATH%
 copy "%PLUGIN_DIR%\PrecisionTimestampedOutputFile.dll" "%OFFICIAL_PROGRAM_PLUGINS_PATH%\PrecisionTimestampedOutputFile.dll"
-copy "%PLUGIN_DIR%\PrecisionTimestampedOutputFile.pdb" "%OFFICIAL_PROGRAM_PLUGINS_PATH%\PrecisionTimestampedOutputFile.pdb"
+@REM copy "%PLUGIN_DIR%\PrecisionTimestampedOutputFile.pdb" "%OFFICIAL_PROGRAM_PLUGINS_PATH%\PrecisionTimestampedOutputFile.pdb"
 echo Done
 
 @REM pause
