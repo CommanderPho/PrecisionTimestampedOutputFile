@@ -2,8 +2,19 @@
 #ifndef PROCESSORPLUGIN_H_DEFINED
 #define PROCESSORPLUGIN_H_DEFINED
 
+#ifdef _WIN32
+#include <Windows.h>
+#endif
+
 #include <chrono>
 #include <ProcessorHeaders.h>
+
+/*
+	The precise system timestamp is acquired on startRecording() and saved into the 'recordingStartTime' member variable
+	The main timestamp output occurs via:
+		String formattedRecordingStartTimeString = PhoDatetimeTimestampHelperSpace::formatPreciseFileTimeAsString(recordingStartTime);
+
+*/
 
 
 //namespace must be an unique name for your plugin
@@ -77,23 +88,29 @@ namespace ProcessorPluginSpace
 		void startRecording() override;
 		void stopRecording() override;
 
+	protected:
+		void writeCustomTimestampFileIfNeeded();
+
+		// I seem to be missing void run();
 	private:
 		bool isProcessing;
 		bool isRecording;
 		bool hasRecorded;
-		bool settingsNeeded;
-		bool shouldRecord;
+		// bool settingsNeeded;
+		// bool shouldRecord;
 
-		File dataDirectory;
-		File rootFolder;
+		// File dataDirectory;
+		// File rootFolder;
+		bool needsWriteToCustomTimstampSyncFile;
 
-		int experimentNumber;
-		int recordingNumber;
-
-		int64 timestamp;
+		int curr_experiment_number;
+		// int recordingNumber;
+		juce::int64 recordingStartSoftwareTimestamp;
+		// juce::int64 pluginUpdateFileTimeSoftwareTimestamp;
+		std::chrono::system_clock::time_point pluginInitializationTime;
 		std::chrono::system_clock::time_point recordingStartTime;
-		
 
+		JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PhoProcessorPlugin);
 	};
 }
 

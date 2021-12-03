@@ -46,3 +46,47 @@ To do so, a _libs_ directory has to be created **at the top level** of the repos
 ```
 
 DLLs in the bin directories will be copied to the open-ephys GUI _shared_ folder when installing.
+
+
+
+
+
+
+## Helpful Functions:
+
+# CoreServices: Allows access to things outside your plugin, such as the state of the editor, etc.
+
+/** Sends a string to the message bar */
+PLUGIN_API void sendStatusMessage(const String& text);
+
+/** Sends a string to the message bar */
+PLUGIN_API void sendStatusMessage(const char* text);
+
+
+
+getRecordingStatus
+
+PLUGIN_API juce::int64 getGlobalTimestamp();
+
+/** Gets the full id of the node generating global timestamps.
+Returns 0 if timestamps are provided by the software high resolution timer */
+PLUGIN_API uint32 getGlobalTimestampSourceFullId();
+
+/** Set new recording directory */
+PLUGIN_API void setRecordingDirectory(String dir);
+
+PLUGIN_API File getRecordingDirectory();
+
+/** Create new recording directory */
+
+namespace RecordNode
+{
+/** Forces creation of new directory on recording */
+PLUGIN_API void createNewrecordingDir();
+
+/** Gets the current recording directories and status information */
+PLUGIN_API File getRecordingPath();
+PLUGIN_API int getRecordingNumber();
+PLUGIN_API int getExperimentNumber();
+PLUGIN_API bool getRecordThreadStatus();
+
