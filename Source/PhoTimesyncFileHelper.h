@@ -33,14 +33,11 @@ bool writeOutCustomFile(std::chrono::system_clock::time_point recordingStartSave
 	int curr_experiment_number = CoreServices::RecordNode::getExperimentNumber();
 	bool curr_recording_thread_status = CoreServices::RecordNode::getRecordThreadStatus();
 
-
-	CoreServices::sendStatusMessage("\t PhoTimesyncFileHelper::writeOutCustomFile: destDirectory: " + destDirectory.getFullPathName());
-	CoreServices::sendStatusMessage("\t \t curr_experiment_number: " + String(curr_experiment_number));
-	CoreServices::sendStatusMessage("\t \t curr_recording_thread_status: " + String(curr_recording_thread_status));
-
-	// const File destDirectory (CoreServices::RecordNode::getRecordingPath());
-	
-	// 
+	if (enable_debug_printing) {
+		CoreServices::sendStatusMessage("\t PhoTimesyncFileHelper::writeOutCustomFile: destDirectory: " + destDirectory.getFullPathName());
+		CoreServices::sendStatusMessage("\t \t curr_experiment_number: " + String(curr_experiment_number));
+		CoreServices::sendStatusMessage("\t \t curr_recording_thread_status: " + String(curr_recording_thread_status));
+	}
 
 	if (!destDirectory.isDirectory())
 	{
@@ -49,8 +46,6 @@ bool writeOutCustomFile(std::chrono::system_clock::time_point recordingStartSave
 
 		// Create the directory if it doesn't exist
 		// destDirectory.createDirectory();
-		
-
 		if (enable_debug_printing) {
 			CoreServices::sendStatusMessage("\t PhoTimesyncFileHelper::writeOutCustomFile: destDirectory " + destDirectory.getFullPathName() + "doesn't exist. Aborting.");
 		}
@@ -71,9 +66,7 @@ bool writeOutCustomFile(std::chrono::system_clock::time_point recordingStartSave
 	}
 	else {
 		const File outputTimestampFile (outputFilePath);
-		std::cout << "Creating " << outputTimestampFile.getFullPathName()
-					<< "..." << std::endl << std::endl;
-
+		std::cout << "Creating " << outputTimestampFile.getFullPathName() << "..." << std::endl << std::endl;
 		if (enable_debug_printing) {
 			// CoreServices::sendStatusMessage(String(outputTimestampFile.getFullPathName()));
 			CoreServices::sendStatusMessage("\t PhoTimesyncFileHelper::writeOutCustomFile: outputFilePath: " + String(outputFilePath.getFullPathName()));
@@ -85,10 +78,9 @@ bool writeOutCustomFile(std::chrono::system_clock::time_point recordingStartSave
 		std::unique_ptr<OutputStream> outputStream (outputTimestampFile.createOutputStream());
 		if (outputStream == nullptr)
 		{
-			std::cout << "Couldn't open "
-					<< outputTimestampFile.getFullPathName() << " for writing" << std::endl << std::endl;
+			// std::cout << "Couldn't open " << outputTimestampFile.getFullPathName() << " for writing" << std::endl << std::endl;
 			if (enable_debug_printing) {
-				CoreServices::sendStatusMessage("Couldn't open " + String(outputTimestampFile.getFullPathName()) +  " for writing");
+				CoreServices::sendStatusMessage("!! ERROR: Couldn't open " + String(outputTimestampFile.getFullPathName()) +  " for writing");
 			}
 			return false;
 		}
@@ -100,12 +92,8 @@ bool writeOutCustomFile(std::chrono::system_clock::time_point recordingStartSave
 		outputStream = nullptr; // This closes the stream and should make sure the values are flushed out to the file
 		// auto outputLine = "curr_experiment_number: " + String(curr_experiment_number) + "; startTime: " + formattedRecordingStartTimeString + "\r\n";
 
-		std::cout << std::endl << " PhoTimesyncFileHelper::writeOutCustomFile: wrote to " << outputTimestampFile.getFullPathName() << ". Complete." << std::endl;
-		if (enable_debug_printing) {
-			// CoreServices::sendStatusMessage(String(outputTimestampFile.getFullPathName()));
-			CoreServices::sendStatusMessage("\t PhoTimesyncFileHelper::writeOutCustomFile: wrote to " + String(outputTimestampFile.getFullPathName()) + ". Complete.");
-		}
-
+		// std::cout << std::endl << " PhoTimesyncFileHelper::writeOutCustomFile: wrote to " << outputTimestampFile.getFullPathName() << ". Complete." << std::endl;
+		CoreServices::sendStatusMessage("\t PhoTimesyncFileHelper::writeOutCustomFile: wrote to " + String(outputTimestampFile.getFullPathName()) + ". Complete.");
 	}
 
 
