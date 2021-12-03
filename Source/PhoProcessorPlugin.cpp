@@ -4,7 +4,7 @@
 
 using namespace ProcessorPluginSpace;
 
-#define DEBUGLOGGING 1
+// #define DEBUGLOGGING 1
 // #define DRYRUN 1
 #define CUSTOMFILE 1
 
@@ -66,29 +66,7 @@ void PhoProcessorPlugin::process(AudioSampleBuffer& buffer)
 	If the processor needs to handle events, this method must be called onyl once per process call
 	If spike processing is also needing, set the argument to true
 	*/
-	// #ifdef DEBUGLOGGING
-	// 	CoreServices::sendStatusMessage("PhoProcessorPlugin::process(...)");
-	// #endif
-
 	isProcessing = true;
-
-	// #ifdef CUSTOMFILE
-	// 	//TODO: this obviously shouldn't be here for efficiency reasons
-	// 	this->writeCustomTimestampFileIfNeeded();
-	// #endif
-
-
-	//checkForEvents(false);
-	// int numChannels = getNumOutputs();
-
-	// for (int chan = 0; chan < numChannels; chan++)
-	// {
-	// 	int numSamples = getNumSamples(chan);
-	// 	int64 timestamp = getTimestamp(chan);
-
-	// 	//Do whatever processing needed
-	// }
-	
 }
 
 
@@ -140,25 +118,6 @@ void PhoProcessorPlugin::loadCustomParametersFromXml()
 	#endif
 	this->curr_experiment_number = CoreServices::RecordNode::getExperimentNumber();
 	// this->curr_recording_thread_status = CoreServices::RecordNode::curr_recording_thread_status();
-//    if (parametersAsXml != nullptr)
-//    {
-//        forEachXmlChildElement (*parametersAsXml, mainNode)
-//        {
-//            if (mainNode->hasTagName("PhoStartTimestampPlugin"))
-//            {
-//                forEachXmlChildElement(*mainNode, aRecordingStartTimestampNode)
-//                {
-//                 //    int id = aRecordingStartTimestampNode->getIntAttribute("id");
-//                    String test = aRecordingStartTimestampNode->getStringAttribute("test");
-//                 //    double phase1 = aRecordingStartTimestampNode->getDoubleAttribute("phase1");
-//                 //    int link21 = aRecordingStartTimestampNode->getIntAttribute("link2trigger1");
-//                 //    m_test[id] = test;
-//                 //    m_phase1Duration[id] = phase1;
-//                 //    m_phase2Duration[id] = phase2;
-//                } // end forEachXmlChildElement
-//            } // end if (mainNode->hasTagName(...))
-//        } // end forEachXmlChildElement
-//    } // end if (parametersAsXml != nullptr)
 } // end function loadCustomParametersFromXml()
 
 
