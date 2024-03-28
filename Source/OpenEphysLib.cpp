@@ -48,7 +48,7 @@ extern "C" EXPORT void getLibInfo(Plugin::LibraryInfo* info)
 	info->name = "PhoPrecisionTimestamp";
 
 	//Version of the library, used only for information
-	info->libVersion = 1;
+	info->libVersion = "0.2.0"; // <---- update
 	info->numPlugins = NUM_PLUGINS;
 }
 
@@ -69,11 +69,11 @@ extern "C" EXPORT int getPluginInfo(int index, Plugin::PluginInfo* info)
 
 	case 0:
 		//Type of plugin. See "Source/Processors/PluginManager/OpenEphysPlugin.h" for complete info about the different type structures
-		info->type = PluginType::PLUGIN_TYPE_PROCESSOR;
+		info->type = Plugin::Type::PROCESSOR;
 		//Processor name
 		info->processor.name = "PhoStartTimestamp"; //Processor name shown in the GUI
 		//Type of processor. Can be FilterProcessor, SourceProcessor, SinkProcessor or UtilityProcessor. Specifies where on the processor list will appear
-		info->processor.type = ProcessorType::SinkProcessor; // I changed this, how does this differ froma  RecordEngine plugin?
+		info->processor.type = Processor::Type::SINK; // I changed this, how does this differ froma  RecordEngine plugin?
 		//Class factory pointer. Replace "ProcessorPluginSpace::ProcessorPlugin" with the namespace and class name.
 		info->processor.creator = &(Plugin::createProcessor<ProcessorPluginSpace::PhoProcessorPlugin>);
 		break;
