@@ -71,7 +71,7 @@ namespace ProcessorPluginSpace
 		void saveCustomParametersToXml(XmlElement* parentElement) override;
 
 		// /** Load custom settings from XML*/
-		void loadCustomParametersFromXml() override;
+		void loadCustomParametersFromXml(XmlElement* customParamsXml) override;
 
 		/** Optional method called every time the signal chain is refreshed or changed in any way.
 

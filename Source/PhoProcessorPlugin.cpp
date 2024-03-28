@@ -78,7 +78,7 @@ void PhoProcessorPlugin::updateSettings()
 	#ifdef DEBUGLOGGING
 		CoreServices::sendStatusMessage("PhoProcessorPlugin::updateSettings(...)");
 	#endif
-	this->curr_experiment_number = CoreServices::RecordNode::getExperimentNumber();
+	this->curr_experiment_number = CoreServices::RecordNode::getExperimentNumber(0); //2024-03-27 - Default to recording nodeid == 0. 
 	// >curr_recording_thread_status = CoreServices::RecordNode::curr_recording_thread_status();
 	#ifdef CUSTOMFILE
 		this->writeCustomTimestampFileIfNeeded();
@@ -111,12 +111,12 @@ void PhoProcessorPlugin::saveCustomParametersToXml(XmlElement *parentElement)
 	mainNode->addChildElement(recordingStartTimestampNode);
 }
 
-void PhoProcessorPlugin::loadCustomParametersFromXml()
+void PhoProcessorPlugin::loadCustomParametersFromXml(XmlElement* customParamsXml)
 {
 	#ifdef DEBUGLOGGING
 		CoreServices::sendStatusMessage("PhoProcessorPlugin::loadCustomParametersFromXml(...)");
 	#endif
-	this->curr_experiment_number = CoreServices::RecordNode::getExperimentNumber();
+	this->curr_experiment_number = CoreServices::RecordNode::getExperimentNumber(0); //2024-03-27 - Default to recording nodeid == 0. 
 	// this->curr_recording_thread_status = CoreServices::RecordNode::curr_recording_thread_status();
 } // end function loadCustomParametersFromXml()
 
@@ -130,7 +130,7 @@ void PhoProcessorPlugin::startRecording()
 	isRecording = true;
 	this->recordingStartTime = PhoDatetimeTimestampHelperSpace::getPreciseFileTime();
 	this->recordingStartSoftwareTimestamp = CoreServices::getGlobalTimestamp();
-	this->curr_experiment_number = CoreServices::RecordNode::getExperimentNumber();
+	this->curr_experiment_number = CoreServices::RecordNode::getExperimentNumber(0); //2024-03-27 - Default to recording nodeid == 0. 
 	// this->curr_recording_thread_status = CoreServices::RecordNode::curr_recording_thread_status();
 	hasRecorded = true;
 	needsWriteToCustomTimstampSyncFile = true;

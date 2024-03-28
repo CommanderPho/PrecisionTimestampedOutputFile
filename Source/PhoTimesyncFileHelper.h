@@ -26,11 +26,11 @@ bool writeOutCustomFile(std::chrono::system_clock::time_point recordingStartSave
 
 
 	// const File destDirectory (File::getCurrentWorkingDirectory());
-	const File destDirectory (CoreServices::getRecordingDirectory());
+	const File destDirectory (CoreServices::getRecordingParentDirectory());
 	// const File destDirectory (CoreServices::getRecordingPath());
 	// const File destDirectory (CoreServices::RecordNode::getRecordingPath());
 	
-	int curr_experiment_number = CoreServices::RecordNode::getExperimentNumber();
+	int curr_experiment_number = CoreServices::RecordNode::getExperimentNumber(0); //2024-03-27 - Default to recording nodeid == 0. 
 	bool curr_recording_thread_status = CoreServices::RecordNode::getRecordThreadStatus();
 
 	if (enable_debug_printing) {
