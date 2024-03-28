@@ -48,7 +48,7 @@ extern "C" EXPORT void getLibInfo(Plugin::LibraryInfo* info)
 	info->name = "PhoPrecisionTimestamp";
 
 	//Version of the library, used only for information
-	info->libVersion = "0.1.0"; // <---- update
+	info->libVersion = "0.2.0"; // <---- update
 	info->numPlugins = NUM_PLUGINS;
 }
 

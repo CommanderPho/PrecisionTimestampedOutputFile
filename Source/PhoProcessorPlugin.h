@@ -2,9 +2,9 @@
 #ifndef PROCESSORPLUGIN_H_DEFINED
 #define PROCESSORPLUGIN_H_DEFINED
 
-#ifdef _WIN32
-#include <Windows.h>
-#endif
+//#ifdef _WIN32
+//#include <Windows.h>
+//#endif
 
 #include <chrono>
 #include <ProcessorHeaders.h>
