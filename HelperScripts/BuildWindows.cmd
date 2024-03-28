@@ -24,10 +24,10 @@ start OE_PLUGIN_PrecisionTimestampedOutputFile.sln
 @REM msbuild "OE_PLUGIN_PrecisionTimestampedOutputFile.sln" -target:ALL_BUILD:Rebuild;
 
 
-@REM NEW 2024-03-28 
-cd "C:\Users\pho\repos\OpenEphys\OEPlugins\PrecisionTimestampedOutputFileNew\Build"
-cmake -G %VS_VERSION% -A x64 ..
-start "OE_PLUGIN_PrecisionTimestampedOutputFileNew.sln"
-%MSBUILD_PATH% "OE_PLUGIN_PrecisionTimestampedOutputFileNew.sln" -target:ALL_BUILD -t:Rebuild -p:Configuration=Release
+@REM @REM NEW 2024-03-28 
+@REM cd "C:\Users\pho\repos\OpenEphys\OEPlugins\PrecisionTimestampedOutputFileNew\Build"
+@REM cmake -G %VS_VERSION% -A x64 ..
+@REM start "OE_PLUGIN_PrecisionTimestampedOutputFileNew.sln"
+@REM %MSBUILD_PATH% "OE_PLUGIN_PrecisionTimestampedOutputFileNew.sln" -target:ALL_BUILD -t:Rebuild -p:Configuration=Release
 
 endlocal
