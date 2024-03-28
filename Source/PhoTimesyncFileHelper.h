@@ -31,7 +31,7 @@ bool writeOutCustomFile(std::chrono::system_clock::time_point recordingStartSave
 	// const File destDirectory (CoreServices::RecordNode::getRecordingPath());
 	
 	int curr_experiment_number = CoreServices::RecordNode::getExperimentNumber(0); //2024-03-27 - Default to recording nodeid == 0. 
-	bool curr_recording_thread_status = CoreServices::RecordNode::getRecordThreadStatus();
+	bool curr_recording_thread_status = CoreServices::RecordNode::getRecordThreadStatus() getRecordThreadStatus();
 
 	if (enable_debug_printing) {
 		CoreServices::sendStatusMessage("\t PhoTimesyncFileHelper::writeOutCustomFile: destDirectory: " + destDirectory.getFullPathName());
